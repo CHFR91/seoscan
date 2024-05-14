@@ -5,8 +5,8 @@ SEOscan check the SEO of a website (TITLE, META description and keywords)
 V0.02 - 05/14/2024
 
 # required
-import sys
-import requests
+import sys<br>
+import requests<br>
 from bs4 import BeautifulSoup
 
 # install
