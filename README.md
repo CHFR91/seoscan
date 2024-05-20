@@ -1,8 +1,8 @@
 # seoscan
-SEOscan check the SEO of a website (TITLE, META description and keywords, H1)
+SEOscan check the SEO of a website (TITLE, META description and keywords, H1, H2 + nb of words on the page)
 
 # version
-V0.03 - 05/20/2024
+V0.04 - 05/20/2024
 
 # required
 import sys<br>
