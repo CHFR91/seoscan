@@ -1,5 +1,5 @@
 # seoscan
-SEOscan check the SEO of a website (TITLE, META description and keywords)
+SEOscan check the SEO of a website (TITLE, META description and keywords, H1)
 
 # version
 V0.03 - 05/20/2024
