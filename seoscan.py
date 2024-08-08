@@ -18,6 +18,7 @@ class COLOUR:
     FAIL = '\033[91m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
+    ITALIC = '\033[3m'
     UNDERLINE = '\033[4m'
 
 
@@ -103,7 +104,7 @@ def get_info(site_url, valeur, verbose):
                 print(f"\n{COLOUR.FAIL}Several H1 for {domain} when there must be one.{COLOUR.ENDC}\n")
             else:
                 print(f"\n{COLOUR.FAIL}No H1 for {domain}!{COLOUR.ENDC}\n")
-        #H2
+        # H2
         elif valeur == 5:
             nb_hde = soup.find_all('h2')
             hde_count = len(nb_hde)
@@ -121,19 +122,39 @@ def get_info(site_url, valeur, verbose):
                         print(f"{COLOUR.OKGREEN}{hde.text}{COLOUR.ENDC} ({ltext})")
 
                     print(f"\nDon't make your <H2> too short or too long. This is a good place to put your important "
-                          f"keywords.")
+                          f"keywords.\n")
+                    print(f"Your text after a <h2> must be around 250 words long.\nIf you have some <H3>, it must be "
+                          f"150 words long after them.")
                 else:
                     for hde in nb_hde:
                         print("-----------------")
                         print(f"{COLOUR.OKGREEN}{hde.text}{COLOUR.ENDC}")
             print(f"\n")
-        #Words in the page
+
+        # Words in the page + Canonical
         elif valeur == 6:
             text = soup.get_text()
             words = text.split()
             word_count = len(words)
 
             print(f"\nNumber of words on this web page ({site_url}): {COLOUR.OKGREEN}{word_count}{COLOUR.ENDC}\n")
+            if verbose:
+                print(f"Length of your page:\n"
+                      f"- {COLOUR.OKBLUE}400 / 500 words:{COLOUR.ENDC} for a text of a niche expression\n"
+                      f"- {COLOUR.OKBLUE}1000 words:{COLOUR.ENDC} for a text of mid-tail query\n"
+                      f"- {COLOUR.OKBLUE}1500 words:{COLOUR.ENDC} for a text of a competitive expression\n")
+
+            # Canonical tag
+            canonical_tag = soup.find('link', rel='canonical')
+
+            print(f"{COLOUR.ITALIC}\nThe canonical tag tells search engines which is the original, preferred version "
+                  f"of a page, thus avoiding duplicate content issues.{COLOUR.ENDC}\n")
+
+            if canonical_tag is None:
+                print(f"{COLOUR.FAIL}No canonical tag found on the page!{COLOUR.ENDC}\n")
+            else:
+                print(f"The canonical of your page is: {COLOUR.OKGREEN}{canonical_tag['href']}{COLOUR.ENDC}\n")
+
 
     else:
         print(f"ERROR: Impossible to get the page of  {site_url}")
@@ -189,7 +210,7 @@ if "-d" in sys.argv:
     source = False
 
 if help:
-    print("V0.04 - 05/20/2024\n\n")
+    print("V0.05 - 08/08/2024\n\n")
     print("-d <www.example.com>")
     print("-v -- verbose\n")
     print("-h -- help + version")
