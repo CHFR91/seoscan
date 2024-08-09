@@ -5,11 +5,11 @@ SEOscan check the SEO of a website (TITLE, META description, keywords and robots
 V0.06.1 - 08/09/2024
 
 # required
-import sys
-import requests
-from bs4 import BeautifulSoup
-import urllib.robotparser
-import datetime
+import sys<br>
+import requests<br>
+from bs4 import BeautifulSoup<br>
+import urllib.robotparser<br>
+import datetime<br>
 
 # install
 $ git clone https://github.com/CHFR91/seoscan.git<br>
@@ -23,9 +23,9 @@ $ ./seoscan.py -d WWW.EXAMPLE.COM
 $ ./seoscan.py -h
 
 # options
--d <www.example.com> and check the SEO of your site
--o -- check OpenGraph tags
--r -- read robots.txt
--v -- verbose
--h -- help + version
--s -- sources
+-d <www.example.com> and check the SEO of your site<br>
+-o -- check OpenGraph tags<br>
+-r -- read robots.txt<br>
+-v -- verbose<br>
+-h -- help + version<br>
+-s -- sources<br>
