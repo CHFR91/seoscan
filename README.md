@@ -2,7 +2,7 @@
 SEOscan check the SEO of a website (TITLE, META description and keywords, H1, H2 + nb of words on the page, canonical)
 
 # version
-V0.05 - 08/08/2024
+V0.05.1 - 08/09/2024
 
 # required
 import sys<br>
