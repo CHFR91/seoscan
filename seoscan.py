@@ -280,13 +280,13 @@ if "-d" in sys.argv:
     source = False
 
 if help:
-    print("V0.06 - 08/09/2024\n\n")
+    print("V0.06.1 - 08/09/2024\n\n")
     print("-d <www.example.com> and check the SEO of your site")
     print("-o -- check OpenGraph tags")
     print("-r -- read robots.txt")
     print("-v -- verbose\n")
     print("-h -- help + version")
-    print("-s -- source")
+    print("-s -- sources")
     entree = False
 elif source:
     print("https://github.com/CHFR91/seoscan\n")
@@ -324,12 +324,12 @@ if entree:
     b = domain
     domain = a + b
 
-#    get_info(domain, 1, verbose)
-#    get_info(domain, 2, verbose)
+    get_info(domain, 1, verbose)
+    get_info(domain, 2, verbose)
     get_info(domain, 3, verbose)
-#    get_info(domain, 4, verbose)
-#    get_info(domain, 5, verbose)
-#    get_info(domain, 6, verbose)
+    get_info(domain, 4, verbose)
+    get_info(domain, 5, verbose)
+    get_info(domain, 6, verbose)
     get_info(domain, 7, verbose)
     get_info(domain, 8, verbose)
 
