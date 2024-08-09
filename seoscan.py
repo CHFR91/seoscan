@@ -137,7 +137,7 @@ def get_info(site_url, valeur, verbose):
             words = text.split()
             word_count = len(words)
 
-            print(f"\nNumber of words on this web page ({site_url}): {COLOUR.OKGREEN}{word_count}{COLOUR.ENDC}\n")
+            print(f"\nNUMBER OF WORDS on this web page ({site_url}): {COLOUR.OKGREEN}{word_count}{COLOUR.ENDC}\n")
             if verbose:
                 print(f"Length of your page:\n"
                       f"- {COLOUR.OKBLUE}400 / 500 words:{COLOUR.ENDC} for a text of a niche expression\n"
@@ -147,17 +147,17 @@ def get_info(site_url, valeur, verbose):
             # Canonical tag
             canonical_tag = soup.find('link', rel='canonical')
 
-            print(f"{COLOUR.ITALIC}\nThe canonical tag tells search engines which is the original, preferred version "
-                  f"of a page, thus avoiding duplicate content issues.{COLOUR.ENDC}\n")
+            print(f"\nThe CANONICAL TAG tells search engines which is the original, preferred version "
+                  f"of a page, thus avoiding duplicate content issues.\n")
 
             if canonical_tag is None:
-                print(f"{COLOUR.FAIL}No canonical tag found on the page!{COLOUR.ENDC}\n")
+                print(f"{COLOUR.FAIL}No canonical tag found on {site_url}!{COLOUR.ENDC}\n")
             else:
-                print(f"The canonical of your page is: {COLOUR.OKGREEN}{canonical_tag['href']}{COLOUR.ENDC}\n")
+                print(f"The canonical of {site_url} is: {COLOUR.OKGREEN}{canonical_tag['href']}{COLOUR.ENDC}\n")
 
 
     else:
-        print(f"ERROR: Impossible to get the page of  {site_url}")
+        print(f"ERROR: Impossible to get the page of {site_url}")
         exit()
     return ''
 
@@ -210,7 +210,7 @@ if "-d" in sys.argv:
     source = False
 
 if help:
-    print("V0.05 - 08/08/2024\n\n")
+    print("V0.05.1 - 08/09/2024\n\n")
     print("-d <www.example.com>")
     print("-v -- verbose\n")
     print("-h -- help + version")
