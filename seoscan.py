@@ -7,6 +7,8 @@ Usage: ./seoscan.py -d www.example.com
 import sys
 import requests
 from bs4 import BeautifulSoup
+import urllib.robotparser
+import datetime
 
 
 # Colours
@@ -66,13 +68,20 @@ def get_info(site_url, valeur, verbose):
                         print(f"Perfect length for your META DESCRIPTION.")
             else:
                 print(f"\n{COLOUR.FAIL}No META DESCRIPTION for {domain}!{COLOUR.ENDC}\n")
-        # META keywords
+        # META keywords + robots
         elif valeur == 3:
             meta_keywords = soup.find('meta', attrs={'name': 'keywords'})
             if meta_keywords:
                 print(f"\nThe META KEYWORDS are: {COLOUR.OKGREEN}{meta_keywords['content']}{COLOUR.ENDC}\n")
             else:
                 print(f"\n{COLOUR.FAIL}No META KEYWORDS for {domain}!{COLOUR.ENDC}\n")
+
+            meta_robots = soup.find('meta', attrs={'name': 'robots'})
+            if meta_robots:
+                print(f"\nThe META ROBOTS are: {COLOUR.OKGREEN}{meta_robots['content']}{COLOUR.ENDC}\n")
+            else:
+                print(f"\n{COLOUR.FAIL}No META ROBOTS for {domain}!{COLOUR.ENDC}\n")
+
         # H1
         elif valeur == 4:
             nb_hun = soup.find_all('h1')
@@ -155,6 +164,59 @@ def get_info(site_url, valeur, verbose):
             else:
                 print(f"The canonical of {site_url} is: {COLOUR.OKGREEN}{canonical_tag['href']}{COLOUR.ENDC}\n")
 
+        # OpenGraph protocol
+        elif valeur == 7:
+            if opengraph:
+                def get_opengraph_tags(soup):
+                    opengraph = {}
+                    for meta in soup.find_all('meta'):
+                        if meta.get('property') and meta['property'].startswith('og:'):
+                            opengraph[meta['property']] = meta.get('content')
+                    return opengraph
+
+                tags = get_opengraph_tags(soup)
+
+                if not tags:
+                    print(f"\n{COLOUR.FAIL}You do not have OpenGraph tags on {site_url}!{COLOUR.ENDC}\n")
+                if tags:
+                    print(f"\nYour OpenGraph tags are :\n")
+
+                    for key, value in tags.items():
+                        print(f"{key}: {value}")
+                    print(f"\n")
+
+                    og_description = soup.find('meta', property='og:description')
+                    og_description_len = len(og_description['content'])
+
+                    print(f"Length of the OPEN GRAPH DESCRIPTION is {COLOUR.OKGREEN}{og_description_len}{COLOUR.ENDC}\n")
+
+                    if verbose:
+                        if og_description_len < 80:
+                            print(f"\nYour OPEN GRAPH DESCRIPTION is too short. You can had some more words in it.\n")
+                        elif og_description_len > 120:
+                            print(f"\nBe careful, the length of your OPEN GRAPH DESCRIPTION is too long, it is good "
+                                  f"to shorten it.\n")
+                        else:
+                            print(f"\nPerfect length for your OPEN GRAPH DESCRIPTION.\n")
+
+        # robots.txt
+        elif valeur == 8:
+            if robots:
+                rp = urllib.robotparser.RobotFileParser()
+                rp.set_url(site_url + "/robots.txt")
+                rp.read()
+
+                if not rp.mtime():
+                    print(f"\n{COLOUR.FAIL}You do not have a robots.txt on {site_url}!{COLOUR.ENDC}\n")
+                if rp.mtime():
+                    print(f"\n{COLOUR.OKGREEN}You have a robots.txt on {site_url}!{COLOUR.ENDC}\n")
+                    normaltime = datetime.datetime.fromtimestamp(rp.mtime())
+                    print(f"Last time your robots.txt was read: {normaltime}\n")
+                    print(f"{COLOUR.ITALIC}-v to read your robots.txt but, be careful, it can be pretty "
+                          f"long!{COLOUR.ENDC}\n")
+                    if verbose:
+                        print(rp)
+                        print(f"\n")
 
     else:
         print(f"ERROR: Impossible to get the page of {site_url}")
@@ -194,6 +256,8 @@ help = False
 source = False
 domain = None
 verbose = False
+opengraph = False
+robots = False
 
 if "-h" in sys.argv:
     help = True
@@ -204,23 +268,34 @@ if "-s" in sys.argv:
 if "-v" in sys.argv:
     verbose = True
 
+if "-o" in sys.argv:
+    opengraph = True
+
+if "-r" in sys.argv:
+    robots = True
+
 if "-d" in sys.argv:
     domain = sys.argv[sys.argv.index("-d") +1]
     help = False
     source = False
 
 if help:
-    print("V0.05.1 - 08/09/2024\n\n")
-    print("-d <www.example.com>")
+    print("V0.06 - 08/09/2024\n\n")
+    print("-d <www.example.com> and check the SEO of your site")
+    print("-o -- check OpenGraph tags")
+    print("-r -- read robots.txt")
     print("-v -- verbose\n")
     print("-h -- help + version")
     print("-s -- source")
     entree = False
 elif source:
+    print("https://github.com/CHFR91/seoscan\n")
     print("https://searchengineland.com/title-tag-length-388468 (04/25/2024)")
     print("https://searchengineland.com/write-meta-description-clicks-428217 (06/14/2023)")
     print("https://ahrefs.com/blog/meta-keywords/ (12/15/2020)")
     print("https://ahrefs.com/blog/h1-tag/ (05/11/2021)")
+    print ("https://ogp.me/")
+    print ("http://www.robotstxt.org/")
     entree = False
 elif domain:
     if "http://" in domain:
@@ -249,11 +324,12 @@ if entree:
     b = domain
     domain = a + b
 
-    get_info(domain, 1, verbose)
-    get_info(domain, 2, verbose)
+#    get_info(domain, 1, verbose)
+#    get_info(domain, 2, verbose)
     get_info(domain, 3, verbose)
-    get_info(domain, 4, verbose)
-    get_info(domain, 5, verbose)
-    get_info(domain, 6, verbose)
-
+#    get_info(domain, 4, verbose)
+#    get_info(domain, 5, verbose)
+#    get_info(domain, 6, verbose)
+    get_info(domain, 7, verbose)
+    get_info(domain, 8, verbose)
 
